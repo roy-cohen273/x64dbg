@@ -2646,6 +2646,12 @@ void MainWindow::on_actionExportdatabase_triggered()
     DbgCmdExec(QString("dbsave \"%1\"").arg(QDir::toNativeSeparators(filename)));
 }
 
+void MainWindow::on_actionExportBreakpoints_triggered()
+{
+    // TODO: replace with my own code
+    MainWindow::on_actionAbout_Qt_triggered();
+}
+
 static void setupMenuCustomizationHelper(QMenu* parentMenu, QList<QAction*> & stringList)
 {
     for(int i = 0; i < parentMenu->actions().size(); i++)
