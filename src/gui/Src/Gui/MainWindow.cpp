@@ -2648,8 +2648,12 @@ void MainWindow::on_actionExportdatabase_triggered()
 
 void MainWindow::on_actionExportBreakpoints_triggered()
 {
-    // TODO: replace with my own code
-    MainWindow::on_actionAbout_Qt_triggered();
+    if(!DbgIsDebugging())
+        return;
+    auto filename = QFileDialog::getSaveFileName(this, tr("Export breakpoints"), QString(), tr("CSV files (*.csv);;All files (*.*)"));
+    if(!filename.length())
+        return;
+    DbgCmdExec(QString("breakpointssave \"%1\"").arg(QDir::toNativeSeparators(filename)));
 }
 
 static void setupMenuCustomizationHelper(QMenu* parentMenu, QList<QAction*> & stringList)

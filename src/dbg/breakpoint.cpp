@@ -582,7 +582,7 @@ bool BpSetSilent(duint Address, BP_TYPE Type, bool silent)
     return true;
 }
 
-bool BpEnumAll(BPENUMCALLBACK EnumCallback, const char* Module, duint base)
+bool BpEnumAll_r(BPENUMCALLBACK_r EnumCallback, void* arg, const char* Module, duint base)
 {
     ASSERT_DEBUGGING("Export call");
     SHARED_ACQUIRE(LockBreakpoints);
@@ -616,7 +616,7 @@ bool BpEnumAll(BPENUMCALLBACK EnumCallback, const char* Module, duint base)
         SHARED_RELEASE();
 
         // Execute the callback
-        if(!EnumCallback(&bpInfo))
+        if(!EnumCallback(&bpInfo, arg))
             callbackStatus = false;
 
         // Restore the breakpoint map lock
@@ -624,6 +624,11 @@ bool BpEnumAll(BPENUMCALLBACK EnumCallback, const char* Module, duint base)
     }
 
     return callbackStatus;
+}
+
+bool BpEnumAll(BPENUMCALLBACK EnumCallback, const char* Module, duint base)
+{
+    return BpEnumAll_r([](const BREAKPOINT * bp, void* arg) { return ((BPENUMCALLBACK)arg)(bp); }, EnumCallback, Module, base);
 }
 
 bool BpEnumAll(BPENUMCALLBACK EnumCallback)

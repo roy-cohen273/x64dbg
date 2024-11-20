@@ -48,6 +48,7 @@ struct BREAKPOINT
 
 // Breakpoint enumeration callback
 typedef bool (*BPENUMCALLBACK)(const BREAKPOINT* bp);
+typedef bool (*BPENUMCALLBACK_r)(const BREAKPOINT* bp, void* arg);
 
 BREAKPOINT* BpInfoFromAddr(BP_TYPE Type, duint Address);
 int BpGetList(std::vector<BREAKPOINT>* List);
@@ -68,6 +69,7 @@ bool BpSetCommandCondition(duint Address, BP_TYPE Type, const char* Condition);
 bool BpSetLogFile(duint Address, BP_TYPE Type, const char* LogFile);
 bool BpSetFastResume(duint Address, BP_TYPE Type, bool fastResume);
 bool BpSetSingleshoot(duint Address, BP_TYPE Type, bool singleshoot);
+bool BpEnumAll_r(BPENUMCALLBACK_r EnumCallback, void* arg = nullptr, const char* Module = nullptr, duint base = 0);
 bool BpEnumAll(BPENUMCALLBACK EnumCallback, const char* Module, duint base = 0);
 bool BpSetSilent(duint Address, BP_TYPE Type, bool silent);
 duint BpGetDLLBpAddr(const char* fileName);

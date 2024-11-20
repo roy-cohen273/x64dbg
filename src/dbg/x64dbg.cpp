@@ -316,6 +316,9 @@ static void registercommands()
     dbgcmdnew("setmaxfindresult,findsetmaxresult", cbInstrSetMaxFindResult, false); //set the maximum number of occurences found
     dbgcmdnew("guidfind,findguid", cbInstrGUIDFind, true); //find GUID references TODO: undocumented
 
+    //user breakepoints
+    dbgcmdnew("breakpointssave,savebreakpoints", cbInstrBreakpointssave, true);
+
     //user database
     dbgcmdnew("dbsave,savedb", cbInstrDbsave, true); //save program database
     dbgcmdnew("dbload,loaddb", cbInstrDbload, true); //load program database
