@@ -4,6 +4,7 @@
 #include "debugger.h"
 #include "exception.h"
 #include "value.h"
+#include "filemap.h"
 
 // breakpoint enumeration callbacks
 static bool cbDeleteAllBreakpoints(const BREAKPOINT* bp)
@@ -1462,5 +1463,65 @@ bool cbDebugSetBPXOptions(int argc, char* argv[])
     SetBPXOptions(type);
     BridgeSettingSetUint("Engine", "BreakpointType", setting_type);
     dprintf(QT_TRANSLATE_NOOP("DBG", "Default breakpoint type set to: %s\n"), strType);
+    return true;
+}
+
+bool cbInstrBreakpointssave(int argc, char* argv[])
+{
+    if(IsArgumentsLessThan(argc, 2))
+        return false;
+    auto wdbpath = StringUtils::Utf8ToUtf16(argv[1]);
+    auto hFile = CreateFileW(wdbpath.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, 0, nullptr);
+    if(hFile == INVALID_HANDLE_VALUE)
+        return false; // TODO (Roy): error handling
+    BufferedWriter bufWriter(hFile);
+
+    BpEnumAll_r([](const BREAKPOINT * bp, void* arg)
+    {
+        // address
+        auto address = StringUtils::sprintf(
+#ifdef COMPILE_X64
+                           "%llX"
+#else
+                           "%lX"
+#endif
+                           ,
+                           bp->addr
+                       );
+
+        // state
+        const char* state;
+        if(!bp->active)
+            state = "Inactive";
+        else if(bp->enabled)
+            state = bp->singleshoot ? "One-time" : "Enabled";
+        else
+            state = "Disabled";
+
+        // type
+        const char* type;
+        switch(bp->type)
+        {
+        case BPNORMAL:
+            type = "normal";
+            break;
+        case BPHARDWARE:
+            type = "hardware";
+            break;
+        case BPMEMORY:
+            type = "memory";
+            break;
+        case BPDLL:
+            type = "DLL";
+            break;
+        case BPEXCEPTION:
+            type = "exception";
+            break;
+        }
+
+        auto line = StringUtils::sprintf("%s,%s,%s\n", address.c_str(), state, type);
+        return ((BufferedWriter*)arg)->Write(line.c_str(), line.length());
+    }, &bufWriter);
+
     return true;
 }

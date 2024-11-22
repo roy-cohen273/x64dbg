@@ -25,3 +25,4 @@ bool cbDebugDisableExceptionBPX(int argc, char* argv[]);
 bool cbDebugSetBPGoto(int argc, char* argv[]);
 bool cbDebugBplist(int argc, char* argv[]);
 bool cbDebugSetBPXOptions(int argc, char* argv[]);
+bool cbInstrBreakpointssave(int argc, char* argv[]);

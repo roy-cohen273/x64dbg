@@ -289,4 +289,5 @@ private slots:
     void on_actionCheckUpdates_triggered();
     void on_actionDefaultTheme_triggered();
     void on_actionAbout_Qt_triggered();
+    void on_actionExportBreakpoints_triggered();
 };

@@ -2646,6 +2646,16 @@ void MainWindow::on_actionExportdatabase_triggered()
     DbgCmdExec(QString("dbsave \"%1\"").arg(QDir::toNativeSeparators(filename)));
 }
 
+void MainWindow::on_actionExportBreakpoints_triggered()
+{
+    if(!DbgIsDebugging())
+        return;
+    auto filename = QFileDialog::getSaveFileName(this, tr("Export breakpoints"), QString(), tr("CSV files (*.csv);;All files (*.*)"));
+    if(!filename.length())
+        return;
+    DbgCmdExec(QString("breakpointssave \"%1\"").arg(QDir::toNativeSeparators(filename)));
+}
+
 static void setupMenuCustomizationHelper(QMenu* parentMenu, QList<QAction*> & stringList)
 {
     for(int i = 0; i < parentMenu->actions().size(); i++)
