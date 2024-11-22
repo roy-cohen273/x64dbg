@@ -1479,7 +1479,15 @@ bool cbInstrBreakpointssave(int argc, char* argv[])
     BpEnumAll_r([](const BREAKPOINT * bp, void* arg)
     {
         // address
-        auto address = bp->addr;
+        auto address = StringUtils::sprintf(
+#ifdef COMPILE_X64
+                           "%llX"
+#else
+                           "%lX"
+#endif
+                           ,
+                           bp->addr
+                       );
 
         // state
         const char* state;
@@ -1511,7 +1519,7 @@ bool cbInstrBreakpointssave(int argc, char* argv[])
             break;
         }
 
-        auto line = StringUtils::sprintf("%llX,%s,%s\n", address, state, type);
+        auto line = StringUtils::sprintf("%s,%s,%s\n", address.c_str(), state, type);
         return ((BufferedWriter*)arg)->Write(line.c_str(), line.length());
     }, &bufWriter);
 
