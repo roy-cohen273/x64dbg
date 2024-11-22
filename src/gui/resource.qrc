@@ -249,6 +249,7 @@
         <file>icons/disable.png</file>
         <file>icons/database-export.png</file>
         <file>icons/database-import.png</file>
+        <file>icons/breakpoints-export.png</file>
         <file>icons/lock.png</file>
         <file>icons/createthread.png</file>
         <file>icons/animatecommand.png</file>

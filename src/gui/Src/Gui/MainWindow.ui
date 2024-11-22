@@ -1346,10 +1346,9 @@
    </property>
   </action>
   <action name="actionExportBreakpoints">
-   <!-- TODO (Roy): replace with my own icon -->
    <property name="icon">
-    <iconset theme="database-export" resource="../../resource.qrc">
-     <normaloff>:/Default/icons/database-export.png</normaloff>:/Default/icons/database-export.png</iconset>
+    <iconset theme="breakpoints-export" resource="../../resource.qrc">
+     <normaloff>:/Default/icons/breakpoints-export.png</normaloff>:/Default/icons/breakpoints-export.png</iconset>
    </property>
    <property name="text">
     <string>Export breakpoints</string>
